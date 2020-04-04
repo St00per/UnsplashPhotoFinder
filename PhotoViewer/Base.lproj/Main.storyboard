@@ -21,7 +21,7 @@
                                 <subviews>
                                     <collectionView clipsSubviews="YES" clearsContextBeforeDrawing="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="OJo-yn-Mkb">
                                         <rect key="frame" x="0.0" y="140" width="414" height="756"/>
-                                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="CsG-SP-bmq">
                                             <size key="itemSize" width="50" height="50"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -36,17 +36,19 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Isy-3K-aJH">
                                                 <rect key="frame" x="16" y="64" width="382" height="44"/>
                                                 <subviews>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fAC-nW-hUR">
-                                                        <rect key="frame" x="0.0" y="5" width="322" height="34"/>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fAC-nW-hUR">
+                                                        <rect key="frame" x="8" y="13" width="314" height="18"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
                                                         <textInputTraits key="textInputTraits"/>
                                                     </textField>
                                                 </subviews>
-                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="fAC-nW-hUR" firstAttribute="centerY" secondItem="Isy-3K-aJH" secondAttribute="centerY" id="Alx-nZ-vZ0"/>
-                                                    <constraint firstItem="fAC-nW-hUR" firstAttribute="leading" secondItem="Isy-3K-aJH" secondAttribute="leading" id="MNC-kS-mqq"/>
+                                                    <constraint firstItem="fAC-nW-hUR" firstAttribute="leading" secondItem="Isy-3K-aJH" secondAttribute="leading" constant="8" id="MNC-kS-mqq"/>
                                                     <constraint firstAttribute="height" constant="44" id="c9a-S5-wgE"/>
                                                 </constraints>
                                             </view>
@@ -65,7 +67,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="iYe-ci-XT6" firstAttribute="trailing" secondItem="Isy-3K-aJH" secondAttribute="trailing" id="3ey-lL-QTV"/>
                                             <constraint firstAttribute="bottom" secondItem="Isy-3K-aJH" secondAttribute="bottom" constant="32" id="FnU-cq-gav"/>

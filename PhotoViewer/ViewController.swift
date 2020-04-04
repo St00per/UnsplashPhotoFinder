@@ -19,8 +19,12 @@ class ViewController: UIViewController {
     private let spaceBetweenCell: CGFloat = 8
     private let itemPerRow: CGFloat = 4
     private let unsplashAccessKey = "iZnFTNJfLHt3QyzUQSihOuxjmEYpXO96ZPaQquA8S7M"
+    
     // MARK: - Private variables
     private var photos: [UnsplashPhoto] = []
+    private var currentSearchQuery = ""
+    private var currentLoadedPage = 1
+    private var requestTask: URLSessionDataTask?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -34,31 +38,33 @@ class ViewController: UIViewController {
     // MARK: - IBActions
     @IBAction func searchButtonPressed(_ sender: UIButton) {
         guard let request = searchTextField.text else { return }
-        getSearchResult(for: request)
+        currentSearchQuery = request
+        searchTextField.resignFirstResponder()
+        getSearchResult(for: request, page: currentLoadedPage)
     }
     
     // MARK: - Public methods
     // MARK: - Private methods
-    private func getSearchResult(for request: String) {
-        if let url = URL.with(string: "search/photos?page=1&count=50&query=balls") {
-           var urlRequest = URLRequest(url: url)
-           urlRequest.setValue("Client-ID \(unsplashAccessKey)", forHTTPHeaderField: "Authorization")
-           
-           URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-              if let data = data {
-                 do {
-                    let searchResult = try JSONDecoder().decode(SearchRequestResult.self, from: data)
-                    self.photos = searchResult.results
-                    
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
+    private func getSearchResult(for request: String, page: Int) {
+        if let url = URL.with(string: "search/photos?page=\(page)&per_page=30&query=\(request)") {
+            var urlRequest = URLRequest(url: url)
+            urlRequest.setValue("Client-ID \(unsplashAccessKey)", forHTTPHeaderField: "Authorization")
+            
+            self.requestTask = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+                if let data = data {
+                    do {
+                        let searchResult = try JSONDecoder().decode(SearchRequestResult.self, from: data)
+                        self.photos.append(contentsOf: searchResult.results)
+                        
+                        DispatchQueue.main.async {
+                            self.collectionView.reloadData()
+                        }
+                    } catch let error {
+                        print(error)
                     }
-                    
-                 } catch let error {
-                    print(error)
-                 }
-              }
-           }.resume()
+                }
+            }
+            requestTask?.resume()
         }
     }
 }
@@ -72,6 +78,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UnsplashPhotoCell", for: indexPath) as? UnsplashPhotoCell else {
             return UICollectionViewCell()
         }
+        
         cell.configure(with: photos[indexPath.row])
         return cell
     }
@@ -94,6 +101,15 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return spaceBetweenCell
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard requestTask?.state == .completed else { return }
+        let scrollIsCloseToNextPage: Bool = scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height
+        
+        if scrollIsCloseToNextPage, scrollView.contentSize.height > 0 {
+            getSearchResult(for: currentSearchQuery, page: currentLoadedPage + 1)
+        }
     }
 }
 

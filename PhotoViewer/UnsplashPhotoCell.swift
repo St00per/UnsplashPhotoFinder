@@ -9,64 +9,38 @@
 import UIKit
 
 class UnsplashPhotoCell: UICollectionViewCell {
-
-    // MARK: - Public constants
-    // MARK: - Public variables
+    
     // MARK: - IBOutlets
-    
     @IBOutlet weak var imageView: UIImageView!
-    // MARK: - Private constants
-    // MARK: - Private variables
     
-    // MARK: - Lifecycle
-    // MARK: - IBActions
+    // MARK: - Private constants
+    private let cache = ImageCache.cache
     
     // MARK: - Public methods
     func configure(with photo: UnsplashPhoto) {
         if let url = URL(string: photo.urls.small) {
-            //downloadPhoto(from: url)
-            imageView.downloaded(from: url)
-        }
-    }
-    // MARK: - Private methods
-    
-    private func downloadPhoto(from url: URL) {
-        let imageDataTask = URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-            guard let strongSelf = self else { return }
-            
-            guard let data = data, let response = response, let image = UIImage(data: data), error == nil else { return }
-            
-            UIView.transition(with: strongSelf, duration: 0.25, options: [.transitionCrossDissolve], animations: {
-                strongSelf.imageView.image = image
-            }, completion: nil)
-            
-            //        let cachedResponse = CachedURLResponse(response: response, data: data)
-            //        strongSelf.cache.storeCachedResponse(cachedResponse, for: URLRequest(url: url))
-            
-            //        DispatchQueue.main.async {
-            //            completion(image, false)
-            //        }
-        }
-    }
-    
-}
-
-extension UIImageView {
-    func downloaded(from url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard
-                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
-                let data = data, error == nil,
-                let image = UIImage(data: data)
-                else { return }
-            DispatchQueue.main.async() {
-                self.image = image
+            if let cachedResponse = cache.cachedResponse(for: URLRequest(url: url)),
+                let image = UIImage(data: cachedResponse.data) {
+                imageView.image = image
+            } else {
+                downloadImage(from: url)
             }
-        }.resume()
+        }
     }
-    func downloaded(from link: String, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
-        guard let url = URL(string: link) else { return }
-        downloaded(from: url, contentMode: mode)
+    
+    // MARK: - Private methods
+    private func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    private func downloadImage(from url: URL) {
+        getData(from: url) { data, response, error in
+            guard let data = data, let response = response, error == nil else { return }
+            let cachedResponse = CachedURLResponse(response: response, data: data)
+            self.cache.storeCachedResponse(cachedResponse, for: URLRequest(url: url))
+            DispatchQueue.main.async() {
+                self.imageView.image = UIImage(data: data)
+            }
+        }
     }
 }
