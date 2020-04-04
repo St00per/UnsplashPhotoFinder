@@ -37,7 +37,7 @@
                                                 <rect key="frame" x="16" y="64" width="382" height="44"/>
                                                 <subviews>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fAC-nW-hUR">
-                                                        <rect key="frame" x="8" y="12.5" width="314" height="19.5"/>
+                                                        <rect key="frame" x="8" y="0.0" width="314" height="44"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -47,9 +47,11 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="fAC-nW-hUR" secondAttribute="bottom" id="AB0-X7-D94"/>
                                                     <constraint firstItem="fAC-nW-hUR" firstAttribute="centerY" secondItem="Isy-3K-aJH" secondAttribute="centerY" id="Alx-nZ-vZ0"/>
                                                     <constraint firstItem="fAC-nW-hUR" firstAttribute="leading" secondItem="Isy-3K-aJH" secondAttribute="leading" constant="8" id="MNC-kS-mqq"/>
                                                     <constraint firstAttribute="height" constant="44" id="c9a-S5-wgE"/>
+                                                    <constraint firstItem="fAC-nW-hUR" firstAttribute="top" secondItem="Isy-3K-aJH" secondAttribute="top" id="cZG-sM-Hzl"/>
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYe-ci-XT6">

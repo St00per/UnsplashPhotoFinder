@@ -45,6 +45,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0E1281472438D897004C70C9 /* MainController */ = {
+			isa = PBXGroup;
+			children = (
+				0E691FBA24363F9B00F5C1D1 /* ViewController.swift */,
+				0E691FBC24363F9B00F5C1D1 /* Main.storyboard */,
+			);
+			path = MainController;
+			sourceTree = "<group>";
+		};
+		0E1281482438D8B5004C70C9 /* ImageCell */ = {
+			isa = PBXGroup;
+			children = (
+				0E691FCC2436487400F5C1D1 /* UnsplashPhotoCell.swift */,
+				0E691FCD2436487400F5C1D1 /* UnsplashPhotoCell.xib */,
+			);
+			path = ImageCell;
+			sourceTree = "<group>";
+		};
+		0E1281492438D8E4004C70C9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0E691FCA2436479A00F5C1D1 /* UnsplashPhoto.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		0E12814A2438D8FD004C70C9 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				0E691FD02436515700F5C1D1 /* URL+Extension.swift */,
+				0E1281452438988E004C70C9 /* ImageCache.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		0E691FAA24363F9B00F5C1D1 = {
 			isa = PBXGroup;
 			children = (
@@ -64,14 +99,11 @@
 		0E691FB524363F9B00F5C1D1 /* PhotoViewer */ = {
 			isa = PBXGroup;
 			children = (
+				0E1281482438D8B5004C70C9 /* ImageCell */,
+				0E1281472438D897004C70C9 /* MainController */,
+				0E1281492438D8E4004C70C9 /* Model */,
+				0E12814A2438D8FD004C70C9 /* Helpers */,
 				0E691FB624363F9B00F5C1D1 /* AppDelegate.swift */,
-				0E691FBA24363F9B00F5C1D1 /* ViewController.swift */,
-				0E691FD02436515700F5C1D1 /* URL+Extension.swift */,
-				0E691FCC2436487400F5C1D1 /* UnsplashPhotoCell.swift */,
-				0E1281452438988E004C70C9 /* ImageCache.swift */,
-				0E691FCD2436487400F5C1D1 /* UnsplashPhotoCell.xib */,
-				0E691FCA2436479A00F5C1D1 /* UnsplashPhoto.swift */,
-				0E691FBC24363F9B00F5C1D1 /* Main.storyboard */,
 				0E691FBF24363F9D00F5C1D1 /* Assets.xcassets */,
 				0E691FC124363F9D00F5C1D1 /* LaunchScreen.storyboard */,
 				0E691FC424363F9D00F5C1D1 /* Info.plist */,

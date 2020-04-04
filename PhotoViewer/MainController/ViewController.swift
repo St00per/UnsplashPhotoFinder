@@ -58,7 +58,9 @@ class ViewController: UIViewController {
                         self.photos.append(contentsOf: searchResult.results)
                         
                         DispatchQueue.main.async {
-                            self.collectionView.reloadData()
+                            UIView.performWithoutAnimation {
+                                self.collectionView.reloadData()
+                            }
                         }
                     } catch let error {
                         print(error)
