@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,6 +20,9 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="61j-Sj-1s0">
                         <rect key="frame" x="0.0" y="0.0" width="108" height="108"/>
                         <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="QCr-OG-c2r">
+                                <rect key="frame" x="44" y="44" width="20" height="20"/>
+                            </activityIndicatorView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zRg-Um-0U4">
                                 <rect key="frame" x="0.0" y="0.0" width="108" height="108"/>
                                 <userDefinedRuntimeAttributes>
@@ -31,11 +34,18 @@
                         </subviews>
                         <color key="backgroundColor" white="0.89900601525821588" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="QCr-OG-c2r" firstAttribute="centerY" secondItem="61j-Sj-1s0" secondAttribute="centerY" id="PJq-tS-i0E"/>
                             <constraint firstItem="zRg-Um-0U4" firstAttribute="leading" secondItem="61j-Sj-1s0" secondAttribute="leading" id="YH1-tZ-Hi7"/>
                             <constraint firstAttribute="trailing" secondItem="zRg-Um-0U4" secondAttribute="trailing" id="Zrz-JW-0xb"/>
                             <constraint firstAttribute="bottom" secondItem="zRg-Um-0U4" secondAttribute="bottom" id="cWf-xQ-ktf"/>
+                            <constraint firstItem="QCr-OG-c2r" firstAttribute="centerX" secondItem="61j-Sj-1s0" secondAttribute="centerX" id="flb-yY-M6C"/>
                             <constraint firstItem="zRg-Um-0U4" firstAttribute="top" secondItem="61j-Sj-1s0" secondAttribute="top" id="vSg-Ey-nem"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="6"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
             </view>

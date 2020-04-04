@@ -82,7 +82,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UnsplashPhotoCell", for: indexPath) as? UnsplashPhotoCell else {
             return UICollectionViewCell()
         }
-        
+        cell.imageView.image = nil
         cell.configure(with: photos[indexPath.row])
         return cell
     }

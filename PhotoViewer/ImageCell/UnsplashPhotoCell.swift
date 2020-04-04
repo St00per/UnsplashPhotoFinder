@@ -15,9 +15,15 @@ class UnsplashPhotoCell: UICollectionViewCell {
     
     // MARK: - Private constants
     private let cache = ImageCache.cache
+    
+    //MARK: - Private variables
     private var imageLoadingTask: URLSessionDataTask?
+    private var imageUrlString: String?
     // MARK: - Public methods
     func configure(with photo: UnsplashPhoto) {
+        
+        imageUrlString = photo.urls.small
+        
         if let url = URL(string: photo.urls.small) {
             if let cachedResponse = cache.cachedResponse(for: URLRequest(url: url)),
                 let image = UIImage(data: cachedResponse.data) {
@@ -30,7 +36,7 @@ class UnsplashPhotoCell: UICollectionViewCell {
     
     // MARK: - Private methods
     private func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-        imageLoadingTask?.cancel()
+        //imageLoadingTask?.cancel()
         imageLoadingTask = URLSession.shared.dataTask(with: url, completionHandler: completion)
         imageLoadingTask?.resume()
     }
@@ -38,10 +44,14 @@ class UnsplashPhotoCell: UICollectionViewCell {
     private func downloadImage(from url: URL) {
         getData(from: url) { data, response, error in
             guard let data = data, let response = response, error == nil else { return }
+
             let cachedResponse = CachedURLResponse(response: response, data: data)
             self.cache.storeCachedResponse(cachedResponse, for: URLRequest(url: url))
+            
             DispatchQueue.main.async() {
-                self.imageView.image = UIImage(data: data)
+                if self.imageUrlString == url.absoluteString {
+                    self.imageView.image = UIImage(data: data)
+                }
             }
         }
     }
