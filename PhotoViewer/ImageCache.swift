@@ -11,8 +11,8 @@ import UIKit
 class ImageCache {
 
     static let cache = URLCache(
-        memoryCapacity: ImageCache.memoryCapacity,
-        diskCapacity: ImageCache.diskCapacity,
+        memoryCapacity: memoryCapacity,
+        diskCapacity: diskCapacity,
         diskPath: "unsplash"
     )
     static let memoryCapacity: Int = 50.megabytes

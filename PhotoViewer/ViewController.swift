@@ -50,6 +50,7 @@ class ViewController: UIViewController {
             var urlRequest = URLRequest(url: url)
             urlRequest.setValue("Client-ID \(unsplashAccessKey)", forHTTPHeaderField: "Authorization")
             
+            guard requestTask?.state != .running else { return }
             self.requestTask = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
                 if let data = data {
                     do {
@@ -64,6 +65,7 @@ class ViewController: UIViewController {
                     }
                 }
             }
+            
             requestTask?.resume()
         }
     }
@@ -105,14 +107,26 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard requestTask?.state == .completed else { return }
-        let scrollIsCloseToNextPage: Bool = scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.frame.height
+        let scrollIsCloseToNextPage: Bool = scrollView.contentOffset.y > scrollView.contentSize.height - (scrollView.frame.height * 2)
         
         if scrollIsCloseToNextPage, scrollView.contentSize.height > 0 {
-            getSearchResult(for: currentSearchQuery, page: currentLoadedPage + 1)
+            currentLoadedPage += 1
+            getSearchResult(for: currentSearchQuery, page: currentLoadedPage)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
     }
 }
 
 extension ViewController: UITextFieldDelegate {
-    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
 }

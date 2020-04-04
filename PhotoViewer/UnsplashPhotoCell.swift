@@ -15,7 +15,7 @@ class UnsplashPhotoCell: UICollectionViewCell {
     
     // MARK: - Private constants
     private let cache = ImageCache.cache
-    
+    private var imageLoadingTask: URLSessionDataTask?
     // MARK: - Public methods
     func configure(with photo: UnsplashPhoto) {
         if let url = URL(string: photo.urls.small) {
@@ -30,7 +30,9 @@ class UnsplashPhotoCell: UICollectionViewCell {
     
     // MARK: - Private methods
     private func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+        imageLoadingTask?.cancel()
+        imageLoadingTask = URLSession.shared.dataTask(with: url, completionHandler: completion)
+        imageLoadingTask?.resume()
     }
     
     private func downloadImage(from url: URL) {
