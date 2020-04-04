@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="UnsplashPhotoCell" customModule="PhotoViewer" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="108" height="108"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="108" height="108"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="61j-Sj-1s0">
+                        <rect key="frame" x="0.0" y="0.0" width="108" height="108"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zRg-Um-0U4">
+                                <rect key="frame" x="0.0" y="0.0" width="108" height="108"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="zRg-Um-0U4" firstAttribute="leading" secondItem="61j-Sj-1s0" secondAttribute="leading" id="YH1-tZ-Hi7"/>
+                            <constraint firstAttribute="trailing" secondItem="zRg-Um-0U4" secondAttribute="trailing" id="Zrz-JW-0xb"/>
+                            <constraint firstAttribute="bottom" secondItem="zRg-Um-0U4" secondAttribute="bottom" id="cWf-xQ-ktf"/>
+                            <constraint firstItem="zRg-Um-0U4" firstAttribute="top" secondItem="61j-Sj-1s0" secondAttribute="top" id="vSg-Ey-nem"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="61j-Sj-1s0" secondAttribute="bottom" id="1TZ-gf-4CP"/>
+                <constraint firstAttribute="trailing" secondItem="61j-Sj-1s0" secondAttribute="trailing" id="ifN-FD-Qwa"/>
+                <constraint firstItem="61j-Sj-1s0" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="kG2-xi-tsG"/>
+                <constraint firstItem="61j-Sj-1s0" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="pvO-1X-7jc"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <size key="customSize" width="108" height="108"/>
+            <connections>
+                <outlet property="imageView" destination="zRg-Um-0U4" id="kcp-hQ-w5c"/>
+            </connections>
+            <point key="canvasLocation" x="20" y="16"/>
+        </collectionViewCell>
+    </objects>
+</document>
