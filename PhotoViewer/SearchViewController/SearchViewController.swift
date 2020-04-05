@@ -43,6 +43,7 @@ class SearchViewController: UIViewController {
         snackBarView.isHidden = true
         
         searchTextField.delegate = self
+        searchTextField.keyboardType = .asciiCapable
         searchTextField.returnKeyType = .search
         
         collectionView.delegate = self
