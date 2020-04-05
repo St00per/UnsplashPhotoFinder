@@ -15,6 +15,7 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
+    @IBOutlet weak var noPhotosLabel: UILabel!
     @IBOutlet weak var snackBarView: UIView!
     
     // MARK: - Private constants
@@ -33,6 +34,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         spinner.isHidden = true
+        noPhotosLabel.isHidden = true
         searchButton.roundCorners(cornerRadius: 6)
         snackBarView.isHidden = true
         searchTextField.delegate = self
@@ -43,10 +45,15 @@ class SearchViewController: UIViewController {
     
     // MARK: - IBActions
     @IBAction func searchButtonPressed(_ sender: UIButton) {
-        guard let request = searchTextField.text?.trimmingCharacters(in: .whitespaces), request != currentSearchQuery else { return }
+        noPhotosLabel.isHidden = true
+        guard let request = searchTextField.text?.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: "_"),
+            request != currentSearchQuery,
+            request.isAlphanumeric else {
+                return
+        }
         photos = []
         UIView.performWithoutAnimation {
-            self.collectionView.reloadData()
+            collectionView.reloadData()
         }
         spinner.isHidden = false
         currentSearchQuery = request
@@ -66,6 +73,15 @@ class SearchViewController: UIViewController {
                 if let data = data {
                     do {
                         let searchResult = try JSONDecoder().decode(SearchRequestResult.self, from: data)
+                        
+                        if searchResult.results.count == 0 {
+                            DispatchQueue.main.async {
+                                self.noPhotosLabel.isHidden = false
+                                self.spinner.isHidden = true
+                            }
+                            return
+                        }
+                        
                         self.photos.append(contentsOf: searchResult.results)
                         DispatchQueue.main.async {
                             var indexPaths: [IndexPath] = []
@@ -206,6 +222,11 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
 }
 
 extension SearchViewController: UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        noPhotosLabel.isHidden = true
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false

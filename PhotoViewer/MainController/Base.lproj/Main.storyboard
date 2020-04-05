@@ -114,17 +114,25 @@
                                                     <action selector="searchButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Wea-ih-Heg"/>
                                                 </connections>
                                             </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Photos not found..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4nL-IT-OmU">
+                                                <rect key="frame" x="135.5" y="116" width="143" height="19"/>
+                                                <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="17"/>
+                                                <color key="textColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="0.20191461267605634" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="iYe-ci-XT6" firstAttribute="trailing" secondItem="Isy-3K-aJH" secondAttribute="trailing" id="3ey-lL-QTV"/>
                                             <constraint firstAttribute="bottom" secondItem="Isy-3K-aJH" secondAttribute="bottom" constant="32" id="FnU-cq-gav"/>
                                             <constraint firstItem="iYe-ci-XT6" firstAttribute="leading" secondItem="bF3-w7-9jk" secondAttribute="trailing" constant="8" id="KQw-zg-os5"/>
+                                            <constraint firstItem="4nL-IT-OmU" firstAttribute="top" secondItem="Isy-3K-aJH" secondAttribute="bottom" constant="8" id="NtJ-af-GEB"/>
                                             <constraint firstItem="iYe-ci-XT6" firstAttribute="centerY" secondItem="Isy-3K-aJH" secondAttribute="centerY" id="TPD-Nb-KiS"/>
                                             <constraint firstAttribute="height" constant="140" id="VzJ-90-2VY"/>
                                             <constraint firstItem="Isy-3K-aJH" firstAttribute="leading" secondItem="2Lj-Fd-nim" secondAttribute="leading" constant="16" id="d4z-37-ymU"/>
                                             <constraint firstAttribute="trailing" secondItem="Isy-3K-aJH" secondAttribute="trailing" constant="16" id="d8K-W2-IbN"/>
                                             <constraint firstItem="fAC-nW-hUR" firstAttribute="trailing" secondItem="iYe-ci-XT6" secondAttribute="leading" constant="-8" id="efp-sH-bcs"/>
+                                            <constraint firstItem="4nL-IT-OmU" firstAttribute="centerX" secondItem="2Lj-Fd-nim" secondAttribute="centerX" id="m0y-45-SW8"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -153,6 +161,7 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="OJo-yn-Mkb" id="GO7-PR-T1m"/>
+                        <outlet property="noPhotosLabel" destination="4nL-IT-OmU" id="R2l-O8-COV"/>
                         <outlet property="searchButton" destination="iYe-ci-XT6" id="mAP-Xl-ejN"/>
                         <outlet property="searchTextField" destination="fAC-nW-hUR" id="Vju-CV-TO5"/>
                         <outlet property="snackBarView" destination="h4V-Kx-1dW" id="WTx-rv-Juj"/>
