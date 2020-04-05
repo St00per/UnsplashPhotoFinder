@@ -41,7 +41,10 @@ class SearchViewController: UIViewController {
         noPhotosLabel.isHidden = true
         searchButton.roundCorners(cornerRadius: 6)
         snackBarView.isHidden = true
+        
         searchTextField.delegate = self
+        searchTextField.returnKeyType = .search
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "UnsplashPhotoCell", bundle: nil), forCellWithReuseIdentifier: "UnsplashPhotoCell")
@@ -49,25 +52,10 @@ class SearchViewController: UIViewController {
     
     // MARK: - IBActions
     @IBAction func searchButtonPressed(_ sender: UIButton) {
-        noPhotosLabel.isHidden = true
-        guard let request = searchTextField.text?.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: "_"),
-            request != currentSearchQuery,
-            request.isAlphanumeric else {
-                return
-        }
-        photos = []
-        currentSearchQuery = request
-        currentLoadedPage = 1
-        //UIView.performWithoutAnimation {
-            collectionView.reloadData()
-        //}
-        spinner.isHidden = false
-        searchTextField.resignFirstResponder()
-        getSearchResult(isFirstLoad: true)
+        startSearchRequest()
     }
     
     // MARK: - Private methods
-    
     private func makeURLRequest() -> URLRequest? {
         if let url = URL.with(string: "search/photos?page=\(currentLoadedPage)&per_page=\(photosPerPage)&query=\(currentSearchQuery)") {
             var urlRequest = URLRequest(url: url)
@@ -78,9 +66,6 @@ class SearchViewController: UIViewController {
     }
     
     private func getSearchResult(isFirstLoad: Bool) {
-        if !isFirstLoad {
-            currentLoadedPage += 1
-        }
         
         guard let urlRequest = self.urlRequest, requestTask?.state != .running else { return }
         
@@ -110,7 +95,25 @@ class SearchViewController: UIViewController {
         requestTask?.resume()
     }
     
-    private func uploadMorePhotos() {
+    private func startSearchRequest() {
+        noPhotosLabel.isHidden = true
+        guard let request = searchTextField.text?.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: "_"),
+            request != currentSearchQuery else {
+                return
+            }
+        photos = []
+        currentSearchQuery = request
+        currentLoadedPage = 1
+        
+        collectionView.reloadData()
+        
+        spinner.isHidden = false
+        searchTextField.resignFirstResponder()
+        getSearchResult(isFirstLoad: true)
+    }
+    
+    private func downloadMorePhotos() {
+        currentLoadedPage += 1
         getSearchResult(isFirstLoad: false)
     }
     
@@ -133,7 +136,7 @@ class SearchViewController: UIViewController {
                 self.collectionView.insertItems(at: newIndexPaths)
             }) {(isFinished) in
                 if isFinished, isFirstLoad {
-                    self.uploadMorePhotos()
+                    self.downloadMorePhotos()
                 }
             }
         }
@@ -173,11 +176,14 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UnsplashPhotoCell", for: indexPath) as? UnsplashPhotoCell else {
-            return UICollectionViewCell()
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UnsplashPhotoCell.reuseIdentifier, for: indexPath)
+             
+        guard let unsplashCell = cell as? UnsplashPhotoCell else {
+            assertionFailure()
+            return cell
         }
-        cell.imageView.image = nil
-        cell.configure(with: photos[indexPath.row])
+        
+        unsplashCell.configure(with: photos[indexPath.row])
         return cell
     }
     
@@ -201,11 +207,15 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return spaceBetweenCell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.view.endEditing(true)
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard requestTask?.state == .completed else { return }
         let scrollIsCloseToNextPage: Bool = scrollView.contentOffset.y > scrollView.contentSize.height - (scrollView.frame.height * 2)
         if scrollIsCloseToNextPage, scrollView.contentSize.height > 0 {
-            uploadMorePhotos()
+            downloadMorePhotos()
         }
     }
 }
@@ -217,6 +227,7 @@ extension SearchViewController: UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        startSearchRequest()
         self.view.endEditing(true)
         return false
     }

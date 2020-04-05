@@ -14,6 +14,9 @@ class UnsplashPhotoCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
+    //MARK: - Public constants
+    static let reuseIdentifier = "UnsplashPhotoCell"
+    
     // MARK: - Private constants
     private let cache = ImageCache.cache
     
@@ -33,7 +36,7 @@ class UnsplashPhotoCell: UICollectionViewCell {
     func configure(with photo: UnsplashPhoto) {
         
         imageUrlString = photo.urls.thumb
-        
+        imageView.image = nil
         if let url = URL(string: photo.urls.thumb) {
             if let cachedResponse = cache.cachedResponse(for: URLRequest(url: url)),
                 let image = UIImage(data: cachedResponse.data) {
