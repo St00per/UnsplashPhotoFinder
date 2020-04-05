@@ -9,7 +9,7 @@
 import UIKit
 
 class SearchViewController: UIViewController {
-
+    
     // MARK: - IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchTextField: UITextField!
@@ -29,7 +29,11 @@ class SearchViewController: UIViewController {
     private var currentLoadedPage = 1
     private var photosPerPage = 30
     private var requestTask: URLSessionDataTask?
-    
+    private var urlRequest: URLRequest? {
+        get {
+           makeURLRequest()
+        }
+    }
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,107 +56,92 @@ class SearchViewController: UIViewController {
                 return
         }
         photos = []
-        UIView.performWithoutAnimation {
-            collectionView.reloadData()
-        }
-        spinner.isHidden = false
         currentSearchQuery = request
         currentLoadedPage = 1
+        //UIView.performWithoutAnimation {
+            collectionView.reloadData()
+        //}
+        spinner.isHidden = false
         searchTextField.resignFirstResponder()
-        getSearchResult(for: request, page: currentLoadedPage)
+        getSearchResult(isFirstLoad: true)
     }
     
     // MARK: - Private methods
-    private func getSearchResult(for request: String, page: Int) {
-        if let url = URL.with(string: "search/photos?page=\(page)&per_page=\(photosPerPage)&query=\(request)") {
-            var urlRequest = URLRequest(url: url)
-            urlRequest.setValue("Client-ID \(unsplashAccessKey)", forHTTPHeaderField: "Authorization")
-            
-            guard requestTask?.state != .running else { return }
-            self.requestTask = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-                if let data = data {
-                    do {
-                        let searchResult = try JSONDecoder().decode(SearchRequestResult.self, from: data)
-                        
-                        if searchResult.results.count == 0 {
-                            DispatchQueue.main.async {
-                                self.noPhotosLabel.isHidden = false
-                                self.spinner.isHidden = true
-                            }
-                            return
-                        }
-                        
-                        self.photos.append(contentsOf: searchResult.results)
-                        DispatchQueue.main.async {
-                            var indexPaths: [IndexPath] = []
-                            for (index, _) in searchResult.results.enumerated() {
-                                let addingIndex = index
-                                let indexPath = IndexPath(item: addingIndex, section: 0)
-                                indexPaths.append(indexPath)
-                            }
-                            self.spinner.isHidden = true
-                            self.collectionView.performBatchUpdates({
-                                self.collectionView.insertItems(at: indexPaths)
-                            }) {(isFinished) in
-                                if isFinished {
-                                    self.uploadMorePhotos()
-                                }
-                            }
-                        }
-                    } catch let error {
-                        print(error)
-                        DispatchQueue.main.async {
-                            self.spinner.isHidden = true
-                            guard self.snackBarView.isHidden == true else { return }
-                            self.showSnackBar()
-                        }
-                    }
-                }
-            }
-            requestTask?.resume()
-        }
-    }
     
-    private func uploadMorePhotos() {
-        currentLoadedPage += 1
+    private func makeURLRequest() -> URLRequest? {
         if let url = URL.with(string: "search/photos?page=\(currentLoadedPage)&per_page=\(photosPerPage)&query=\(currentSearchQuery)") {
             var urlRequest = URLRequest(url: url)
             urlRequest.setValue("Client-ID \(unsplashAccessKey)", forHTTPHeaderField: "Authorization")
-            
-            guard requestTask?.state != .running else { return }
-            self.requestTask = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
-                if let data = data {
-                    do {
-                        let searchResult = try JSONDecoder().decode(SearchRequestResult.self, from: data)
-                        self.photos.append(contentsOf: searchResult.results)
-                        
+            return urlRequest
+        }
+        return nil
+    }
+    
+    private func getSearchResult(isFirstLoad: Bool) {
+        if !isFirstLoad {
+            currentLoadedPage += 1
+        }
+        
+        guard let urlRequest = self.urlRequest, requestTask?.state != .running else { return }
+        
+        self.requestTask = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+            if let data = data {
+                do {
+                    let searchResult = try JSONDecoder().decode(SearchRequestResult.self, from: data)
+                    
+                    if searchResult.results.count == 0, isFirstLoad {
                         DispatchQueue.main.async {
-                            var indexPaths: [IndexPath] = []
-                            for (index, _) in searchResult.results.enumerated() {
-                                let addingIndex = index + (self.photos.count - self.photosPerPage)
-                                let indexPath = IndexPath(item: addingIndex, section: 0)
-                                indexPaths.append(indexPath)
-                            }
+                            self.noPhotosLabel.isHidden = false
                             self.spinner.isHidden = true
-                            self.collectionView.performBatchUpdates({
-                                self.collectionView.insertItems(at: indexPaths)
-                            }, completion: nil)
                         }
-                    } catch let error {
-                        print(error)
-                        DispatchQueue.main.async {
-                            self.spinner.isHidden = true
-                            guard self.snackBarView.isHidden == true else { return }
-                            self.showSnackBar()
-                        }
+                        return
+                    }
+                    
+                    self.photos.append(contentsOf: searchResult.results)
+                    self.updateCollectionView(with: searchResult.results, isFirstLoad: isFirstLoad)
+                } catch let error {
+                    print(error)
+                    DispatchQueue.main.async {
+                        self.showSnackBar()
                     }
                 }
             }
-            requestTask?.resume()
+        }
+        requestTask?.resume()
+    }
+    
+    private func uploadMorePhotos() {
+        getSearchResult(isFirstLoad: false)
+    }
+    
+    private func updateCollectionView(with newPhotos: [UnsplashPhoto], isFirstLoad: Bool) {
+        DispatchQueue.main.async {
+            var newIndexPaths: [IndexPath] = []
+            for (index, _) in newPhotos.enumerated() {
+                var addedIndex: Int
+                if isFirstLoad {
+                    addedIndex = index
+                } else {
+                    addedIndex = index + (self.photos.count - self.photosPerPage)
+                }
+                
+                let indexPath = IndexPath(item: addedIndex, section: 0)
+                newIndexPaths.append(indexPath)
+            }
+            self.spinner.isHidden = true
+            self.collectionView.performBatchUpdates({
+                self.collectionView.insertItems(at: newIndexPaths)
+            }) {(isFinished) in
+                if isFinished, isFirstLoad {
+                    self.uploadMorePhotos()
+                }
+            }
         }
     }
     
     private func showSnackBar() {
+        guard self.snackBarView.isHidden == true else { return }
+        spinner.isHidden = true
         snackBarView.isHidden = false
         snackBarView.alpha = 0
         UIView.animate(withDuration: 0.2, animations: {
@@ -207,7 +196,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return spaceBetweenCell
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return spaceBetweenCell
     }
