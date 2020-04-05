@@ -12,6 +12,7 @@ class UnsplashPhotoCell: UICollectionViewCell {
     
     // MARK: - IBOutlets
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     // MARK: - Private constants
     private let cache = ImageCache.cache
@@ -19,6 +20,15 @@ class UnsplashPhotoCell: UICollectionViewCell {
     //MARK: - Private variables
     private var imageLoadingTask: URLSessionDataTask?
     private var imageUrlString: String?
+    
+    //MARK: - Lifecycle
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        if let spinner = self.spinner {
+            spinner.startAnimating()
+        }
+    }
+    
     // MARK: - Public methods
     func configure(with photo: UnsplashPhoto) {
         

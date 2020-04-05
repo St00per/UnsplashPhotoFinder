@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     // MARK: - Private constants
     private let spaceBetweenCell: CGFloat = 8
@@ -29,6 +30,7 @@ class ViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        spinner.isHidden = true
         searchTextField.delegate = self
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -38,6 +40,7 @@ class ViewController: UIViewController {
     // MARK: - IBActions
     @IBAction func searchButtonPressed(_ sender: UIButton) {
         guard let request = searchTextField.text else { return }
+        spinner.isHidden = false
         currentSearchQuery = request
         searchTextField.resignFirstResponder()
         getSearchResult(for: request, page: currentLoadedPage)
@@ -59,6 +62,7 @@ class ViewController: UIViewController {
                         
                         DispatchQueue.main.async {
                             UIView.performWithoutAnimation {
+                                self.spinner.isHidden = true
                                 self.collectionView.reloadData()
                             }
                         }

@@ -36,6 +36,10 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Isy-3K-aJH">
                                                 <rect key="frame" x="16" y="64" width="382" height="44"/>
                                                 <subviews>
+                                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="bF3-w7-9jk">
+                                                        <rect key="frame" x="294" y="12" width="20" height="20"/>
+                                                        <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </activityIndicatorView>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter search query..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fAC-nW-hUR">
                                                         <rect key="frame" x="8" y="0.0" width="314" height="44"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -48,6 +52,7 @@
                                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="fAC-nW-hUR" secondAttribute="bottom" id="AB0-X7-D94"/>
+                                                    <constraint firstItem="bF3-w7-9jk" firstAttribute="centerY" secondItem="Isy-3K-aJH" secondAttribute="centerY" id="AYa-YJ-sF9"/>
                                                     <constraint firstItem="fAC-nW-hUR" firstAttribute="centerY" secondItem="Isy-3K-aJH" secondAttribute="centerY" id="Alx-nZ-vZ0"/>
                                                     <constraint firstItem="fAC-nW-hUR" firstAttribute="leading" secondItem="Isy-3K-aJH" secondAttribute="leading" constant="8" id="MNC-kS-mqq"/>
                                                     <constraint firstAttribute="height" constant="44" id="c9a-S5-wgE"/>
@@ -78,6 +83,7 @@
                                         <constraints>
                                             <constraint firstItem="iYe-ci-XT6" firstAttribute="trailing" secondItem="Isy-3K-aJH" secondAttribute="trailing" id="3ey-lL-QTV"/>
                                             <constraint firstAttribute="bottom" secondItem="Isy-3K-aJH" secondAttribute="bottom" constant="32" id="FnU-cq-gav"/>
+                                            <constraint firstItem="iYe-ci-XT6" firstAttribute="leading" secondItem="bF3-w7-9jk" secondAttribute="trailing" constant="8" id="KQw-zg-os5"/>
                                             <constraint firstItem="iYe-ci-XT6" firstAttribute="centerY" secondItem="Isy-3K-aJH" secondAttribute="centerY" id="TPD-Nb-KiS"/>
                                             <constraint firstAttribute="height" constant="140" id="VzJ-90-2VY"/>
                                             <constraint firstItem="Isy-3K-aJH" firstAttribute="leading" secondItem="2Lj-Fd-nim" secondAttribute="leading" constant="16" id="d4z-37-ymU"/>
@@ -111,6 +117,7 @@
                         <outlet property="collectionView" destination="OJo-yn-Mkb" id="GO7-PR-T1m"/>
                         <outlet property="searchButton" destination="iYe-ci-XT6" id="mAP-Xl-ejN"/>
                         <outlet property="searchTextField" destination="fAC-nW-hUR" id="Vju-CV-TO5"/>
+                        <outlet property="spinner" destination="bF3-w7-9jk" id="Lzc-kB-RSM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
