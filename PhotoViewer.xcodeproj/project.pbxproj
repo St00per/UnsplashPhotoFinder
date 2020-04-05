@@ -49,13 +49,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0E1281472438D897004C70C9 /* MainController */ = {
+		0E1281472438D897004C70C9 /* SearchViewController */ = {
 			isa = PBXGroup;
 			children = (
-				0E691FBA24363F9B00F5C1D1 /* SearchViewController.swift */,
 				0E691FBC24363F9B00F5C1D1 /* Main.storyboard */,
+				0E691FBA24363F9B00F5C1D1 /* SearchViewController.swift */,
 			);
-			path = MainController;
+			path = SearchViewController;
 			sourceTree = "<group>";
 		};
 		0E1281482438D8B5004C70C9 /* ImageCell */ = {
@@ -106,7 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				0E1281482438D8B5004C70C9 /* ImageCell */,
-				0E1281472438D897004C70C9 /* MainController */,
+				0E1281472438D897004C70C9 /* SearchViewController */,
 				0E1281492438D8E4004C70C9 /* Model */,
 				0E12814A2438D8FD004C70C9 /* Helpers */,
 				0E691FB624363F9B00F5C1D1 /* AppDelegate.swift */,
