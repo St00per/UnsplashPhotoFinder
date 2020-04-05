@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class SearchViewController: UIViewController {
 
     // MARK: - IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
@@ -27,7 +27,6 @@ class ViewController: UIViewController {
     private var currentSearchQuery = ""
     private var currentLoadedPage = 1
     private var requestTask: URLSessionDataTask?
-    private var requestCount = 0
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -50,6 +49,7 @@ class ViewController: UIViewController {
         }
         spinner.isHidden = false
         currentSearchQuery = request
+        currentLoadedPage = 1
         searchTextField.resignFirstResponder()
         getSearchResult(for: request, page: currentLoadedPage)
     }
@@ -57,6 +57,34 @@ class ViewController: UIViewController {
     // MARK: - Private methods
     private func getSearchResult(for request: String, page: Int) {
         if let url = URL.with(string: "search/photos?page=\(page)&per_page=30&query=\(request)") {
+            var urlRequest = URLRequest(url: url)
+            urlRequest.setValue("Client-ID \(unsplashAccessKey)", forHTTPHeaderField: "Authorization")
+            
+            guard requestTask?.state != .running else { return }
+            self.requestTask = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+                if let data = data {
+                    do {
+                        let searchResult = try JSONDecoder().decode(SearchRequestResult.self, from: data)
+                        self.photos.append(contentsOf: searchResult.results)
+                        
+                        self.uploadMorePhotos()
+                    } catch let error {
+                        print(error)
+                        DispatchQueue.main.async {
+                            self.spinner.isHidden = true
+                            guard self.snackBarView.isHidden == true else { return }
+                            self.showSnackBar()
+                        }
+                    }
+                }
+            }
+            requestTask?.resume()
+        }
+    }
+    
+    private func uploadMorePhotos() {
+        currentLoadedPage += 1
+        if let url = URL.with(string: "search/photos?page=\(currentLoadedPage)&per_page=30&query=\(currentSearchQuery)") {
             var urlRequest = URLRequest(url: url)
             urlRequest.setValue("Client-ID \(unsplashAccessKey)", forHTTPHeaderField: "Authorization")
             
@@ -113,7 +141,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         photos.count
     }
@@ -151,23 +179,12 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
         guard requestTask?.state == .completed else { return }
         let scrollIsCloseToNextPage: Bool = scrollView.contentOffset.y > scrollView.contentSize.height - (scrollView.frame.height * 2)
         if scrollIsCloseToNextPage, scrollView.contentSize.height > 0 {
-            currentLoadedPage += 1
-            requestCount += 1
-            print("REQUEST COUNT: \(requestCount)")
-            getSearchResult(for: currentSearchQuery, page: currentLoadedPage)
+            uploadMorePhotos()
         }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
     }
 }
 
-extension ViewController: UITextFieldDelegate {
+extension SearchViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
