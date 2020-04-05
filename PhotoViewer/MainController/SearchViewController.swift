@@ -26,6 +26,7 @@ class SearchViewController: UIViewController {
     private var photos: [UnsplashPhoto] = []
     private var currentSearchQuery = ""
     private var currentLoadedPage = 1
+    private var photosPerPage = 30
     private var requestTask: URLSessionDataTask?
     
     // MARK: - Lifecycle
@@ -56,7 +57,7 @@ class SearchViewController: UIViewController {
     
     // MARK: - Private methods
     private func getSearchResult(for request: String, page: Int) {
-        if let url = URL.with(string: "search/photos?page=\(page)&per_page=30&query=\(request)") {
+        if let url = URL.with(string: "search/photos?page=\(page)&per_page=\(photosPerPage)&query=\(request)") {
             var urlRequest = URLRequest(url: url)
             urlRequest.setValue("Client-ID \(unsplashAccessKey)", forHTTPHeaderField: "Authorization")
             
@@ -66,8 +67,22 @@ class SearchViewController: UIViewController {
                     do {
                         let searchResult = try JSONDecoder().decode(SearchRequestResult.self, from: data)
                         self.photos.append(contentsOf: searchResult.results)
-                        
-                        self.uploadMorePhotos()
+                        DispatchQueue.main.async {
+                            var indexPaths: [IndexPath] = []
+                            for (index, _) in searchResult.results.enumerated() {
+                                let addingIndex = index
+                                let indexPath = IndexPath(item: addingIndex, section: 0)
+                                indexPaths.append(indexPath)
+                            }
+                            self.spinner.isHidden = true
+                            self.collectionView.performBatchUpdates({
+                                self.collectionView.insertItems(at: indexPaths)
+                            }) {(isFinished) in
+                                if isFinished {
+                                    self.uploadMorePhotos()
+                                }
+                            }
+                        }
                     } catch let error {
                         print(error)
                         DispatchQueue.main.async {
@@ -84,7 +99,7 @@ class SearchViewController: UIViewController {
     
     private func uploadMorePhotos() {
         currentLoadedPage += 1
-        if let url = URL.with(string: "search/photos?page=\(currentLoadedPage)&per_page=30&query=\(currentSearchQuery)") {
+        if let url = URL.with(string: "search/photos?page=\(currentLoadedPage)&per_page=\(photosPerPage)&query=\(currentSearchQuery)") {
             var urlRequest = URLRequest(url: url)
             urlRequest.setValue("Client-ID \(unsplashAccessKey)", forHTTPHeaderField: "Authorization")
             
@@ -96,10 +111,16 @@ class SearchViewController: UIViewController {
                         self.photos.append(contentsOf: searchResult.results)
                         
                         DispatchQueue.main.async {
-                            UIView.performWithoutAnimation {
-                                self.spinner.isHidden = true
-                                self.collectionView.reloadData()
+                            var indexPaths: [IndexPath] = []
+                            for (index, _) in searchResult.results.enumerated() {
+                                let addingIndex = index + (self.photos.count - self.photosPerPage)
+                                let indexPath = IndexPath(item: addingIndex, section: 0)
+                                indexPaths.append(indexPath)
                             }
+                            self.spinner.isHidden = true
+                            self.collectionView.performBatchUpdates({
+                                self.collectionView.insertItems(at: indexPaths)
+                            }, completion: nil)
                         }
                     } catch let error {
                         print(error)
