@@ -32,9 +32,9 @@ class UnsplashPhotoCell: UICollectionViewCell {
     // MARK: - Public methods
     func configure(with photo: UnsplashPhoto) {
         
-        imageUrlString = photo.urls.small
+        imageUrlString = photo.urls.thumb
         
-        if let url = URL(string: photo.urls.small) {
+        if let url = URL(string: photo.urls.thumb) {
             if let cachedResponse = cache.cachedResponse(for: URLRequest(url: url)),
                 let image = UIImage(data: cachedResponse.data) {
                 imageView.image = image
@@ -46,7 +46,7 @@ class UnsplashPhotoCell: UICollectionViewCell {
     
     // MARK: - Private methods
     private func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-        //imageLoadingTask?.cancel()
+
         imageLoadingTask = URLSession.shared.dataTask(with: url, completionHandler: completion)
         imageLoadingTask?.resume()
     }

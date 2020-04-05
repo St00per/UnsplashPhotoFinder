@@ -17,6 +17,7 @@
 		0E691FCE2436487400F5C1D1 /* UnsplashPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E691FCC2436487400F5C1D1 /* UnsplashPhotoCell.swift */; };
 		0E691FCF2436487400F5C1D1 /* UnsplashPhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E691FCD2436487400F5C1D1 /* UnsplashPhotoCell.xib */; };
 		0E691FD12436515700F5C1D1 /* URL+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E691FD02436515700F5C1D1 /* URL+Extension.swift */; };
+		0ECE5B582439CB6E00B333A8 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECE5B572439CB6E00B333A8 /* UIView+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		0E691FCC2436487400F5C1D1 /* UnsplashPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashPhotoCell.swift; sourceTree = "<group>"; };
 		0E691FCD2436487400F5C1D1 /* UnsplashPhotoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UnsplashPhotoCell.xib; sourceTree = "<group>"; };
 		0E691FD02436515700F5C1D1 /* URL+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extension.swift"; sourceTree = "<group>"; };
+		0ECE5B572439CB6E00B333A8 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				0E691FD02436515700F5C1D1 /* URL+Extension.swift */,
+				0ECE5B572439CB6E00B333A8 /* UIView+Extension.swift */,
 				0E1281452438988E004C70C9 /* ImageCache.swift */,
 			);
 			path = Helpers;
@@ -184,6 +187,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0E1281462438988E004C70C9 /* ImageCache.swift in Sources */,
+				0ECE5B582439CB6E00B333A8 /* UIView+Extension.swift in Sources */,
 				0E691FBB24363F9B00F5C1D1 /* ViewController.swift in Sources */,
 				0E691FB724363F9B00F5C1D1 /* AppDelegate.swift in Sources */,
 				0E691FCB2436479A00F5C1D1 /* UnsplashPhoto.swift in Sources */,

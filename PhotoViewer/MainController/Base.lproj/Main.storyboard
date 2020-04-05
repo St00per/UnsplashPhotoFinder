@@ -7,6 +7,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="ProximaNova-Bold.ttf">
+            <string>ProximaNova-Bold</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -30,26 +35,57 @@
                                         </collectionViewFlowLayout>
                                         <cells/>
                                     </collectionView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Lj-Fd-nim">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h4V-Kx-1dW" userLabel="SnackBarView">
+                                        <rect key="frame" x="107" y="836" width="200" height="44"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rM0-KC-30F">
+                                                <rect key="frame" x="0.0" y="0.0" width="200" height="44"/>
+                                                <color key="backgroundColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="8"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading Has Limited..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AgN-MA-hCO">
+                                                <rect key="frame" x="19.5" y="12.5" width="161" height="19"/>
+                                                <fontDescription key="fontDescription" name="ProximaNova-Bold" family="Proxima Nova" pointSize="16"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="CjC-3L-dSj"/>
+                                            <constraint firstItem="AgN-MA-hCO" firstAttribute="centerX" secondItem="h4V-Kx-1dW" secondAttribute="centerX" id="Kj0-FE-dwC"/>
+                                            <constraint firstAttribute="bottom" secondItem="rM0-KC-30F" secondAttribute="bottom" id="YnR-z7-0GN"/>
+                                            <constraint firstItem="rM0-KC-30F" firstAttribute="leading" secondItem="h4V-Kx-1dW" secondAttribute="leading" id="fUp-7W-sp4"/>
+                                            <constraint firstItem="AgN-MA-hCO" firstAttribute="centerY" secondItem="h4V-Kx-1dW" secondAttribute="centerY" id="jBU-2e-Kju"/>
+                                            <constraint firstAttribute="width" constant="200" id="li0-PY-ELE"/>
+                                            <constraint firstAttribute="trailing" secondItem="rM0-KC-30F" secondAttribute="trailing" id="qdp-DN-NvS"/>
+                                            <constraint firstItem="rM0-KC-30F" firstAttribute="top" secondItem="h4V-Kx-1dW" secondAttribute="top" id="x9H-FK-OeP"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Lj-Fd-nim" userLabel="Header View">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="140"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Isy-3K-aJH">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Isy-3K-aJH" userLabel="Search Field View">
                                                 <rect key="frame" x="16" y="64" width="382" height="44"/>
                                                 <subviews>
                                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="bF3-w7-9jk">
                                                         <rect key="frame" x="294" y="12" width="20" height="20"/>
-                                                        <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="color" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </activityIndicatorView>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter search query..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fAC-nW-hUR">
-                                                        <rect key="frame" x="8" y="0.0" width="314" height="44"/>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter search query..." textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="fAC-nW-hUR">
+                                                        <rect key="frame" x="8" y="0.0" width="306" height="44"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="16"/>
                                                         <textInputTraits key="textInputTraits"/>
                                                     </textField>
                                                 </subviews>
-                                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="fAC-nW-hUR" secondAttribute="bottom" id="AB0-X7-D94"/>
                                                     <constraint firstItem="bF3-w7-9jk" firstAttribute="centerY" secondItem="Isy-3K-aJH" secondAttribute="centerY" id="AYa-YJ-sF9"/>
@@ -66,7 +102,7 @@
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYe-ci-XT6">
                                                 <rect key="frame" x="338" y="64" width="60" height="44"/>
-                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="backgroundColor" red="0.075099031690140844" green="0.42943819468309857" blue="0.90924845950704225" alpha="0.56783670774647887" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="60" id="EXq-MV-i6u"/>
                                                     <constraint firstAttribute="height" constant="44" id="lbe-9K-Fm1"/>
@@ -79,7 +115,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="0.20191461267605634" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="iYe-ci-XT6" firstAttribute="trailing" secondItem="Isy-3K-aJH" secondAttribute="trailing" id="3ey-lL-QTV"/>
                                             <constraint firstAttribute="bottom" secondItem="Isy-3K-aJH" secondAttribute="bottom" constant="32" id="FnU-cq-gav"/>
@@ -88,7 +124,7 @@
                                             <constraint firstAttribute="height" constant="140" id="VzJ-90-2VY"/>
                                             <constraint firstItem="Isy-3K-aJH" firstAttribute="leading" secondItem="2Lj-Fd-nim" secondAttribute="leading" constant="16" id="d4z-37-ymU"/>
                                             <constraint firstAttribute="trailing" secondItem="Isy-3K-aJH" secondAttribute="trailing" constant="16" id="d8K-W2-IbN"/>
-                                            <constraint firstItem="fAC-nW-hUR" firstAttribute="trailing" secondItem="iYe-ci-XT6" secondAttribute="leading" id="efp-sH-bcs"/>
+                                            <constraint firstItem="fAC-nW-hUR" firstAttribute="trailing" secondItem="iYe-ci-XT6" secondAttribute="leading" constant="-8" id="efp-sH-bcs"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -98,6 +134,8 @@
                                     <constraint firstAttribute="trailing" secondItem="OJo-yn-Mkb" secondAttribute="trailing" id="3i9-q7-x5g"/>
                                     <constraint firstItem="2Lj-Fd-nim" firstAttribute="top" secondItem="qte-y9-5AS" secondAttribute="top" id="Bj3-dL-yDG"/>
                                     <constraint firstItem="OJo-yn-Mkb" firstAttribute="leading" secondItem="qte-y9-5AS" secondAttribute="leading" id="M49-fL-KcB"/>
+                                    <constraint firstItem="h4V-Kx-1dW" firstAttribute="centerX" secondItem="qte-y9-5AS" secondAttribute="centerX" id="pcb-bJ-sJu"/>
+                                    <constraint firstAttribute="bottom" secondItem="h4V-Kx-1dW" secondAttribute="bottom" constant="16" id="uXN-s6-2Bf"/>
                                     <constraint firstAttribute="trailing" secondItem="2Lj-Fd-nim" secondAttribute="trailing" id="viK-2K-Tce"/>
                                     <constraint firstItem="2Lj-Fd-nim" firstAttribute="leading" secondItem="qte-y9-5AS" secondAttribute="leading" id="yGf-r8-GSu"/>
                                     <constraint firstAttribute="bottom" secondItem="OJo-yn-Mkb" secondAttribute="bottom" id="zoG-b7-haJ"/>
@@ -117,6 +155,7 @@
                         <outlet property="collectionView" destination="OJo-yn-Mkb" id="GO7-PR-T1m"/>
                         <outlet property="searchButton" destination="iYe-ci-XT6" id="mAP-Xl-ejN"/>
                         <outlet property="searchTextField" destination="fAC-nW-hUR" id="Vju-CV-TO5"/>
+                        <outlet property="snackBarView" destination="h4V-Kx-1dW" id="WTx-rv-Juj"/>
                         <outlet property="spinner" destination="bF3-w7-9jk" id="Lzc-kB-RSM"/>
                     </connections>
                 </viewController>

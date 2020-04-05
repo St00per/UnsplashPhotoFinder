@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
+    @IBOutlet weak var snackBarView: UIView!
     
     // MARK: - Private constants
     private let spaceBetweenCell: CGFloat = 8
@@ -26,11 +27,14 @@ class ViewController: UIViewController {
     private var currentSearchQuery = ""
     private var currentLoadedPage = 1
     private var requestTask: URLSessionDataTask?
+    private var requestCount = 0
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         spinner.isHidden = true
+        searchButton.roundCorners(cornerRadius: 6)
+        snackBarView.isHidden = true
         searchTextField.delegate = self
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -39,14 +43,17 @@ class ViewController: UIViewController {
     
     // MARK: - IBActions
     @IBAction func searchButtonPressed(_ sender: UIButton) {
-        guard let request = searchTextField.text else { return }
+        guard let request = searchTextField.text?.trimmingCharacters(in: .whitespaces), request != currentSearchQuery else { return }
+        photos = []
+        UIView.performWithoutAnimation {
+            self.collectionView.reloadData()
+        }
         spinner.isHidden = false
         currentSearchQuery = request
         searchTextField.resignFirstResponder()
         getSearchResult(for: request, page: currentLoadedPage)
     }
     
-    // MARK: - Public methods
     // MARK: - Private methods
     private func getSearchResult(for request: String, page: Int) {
         if let url = URL.with(string: "search/photos?page=\(page)&per_page=30&query=\(request)") {
@@ -68,12 +75,41 @@ class ViewController: UIViewController {
                         }
                     } catch let error {
                         print(error)
+                        DispatchQueue.main.async {
+                            self.spinner.isHidden = true
+                            guard self.snackBarView.isHidden == true else { return }
+                            self.showSnackBar()
+                        }
                     }
                 }
             }
-            
             requestTask?.resume()
         }
+    }
+    
+    private func showSnackBar() {
+        snackBarView.isHidden = false
+        snackBarView.alpha = 0
+        UIView.animate(withDuration: 0.2, animations: {
+            self.snackBarView.alpha = 1
+        }) {(isFinished) in
+            if isFinished {
+                self.hideSnackBar()
+            }
+        }
+    }
+    
+    private func hideSnackBar() {
+        let snackBarDisplayDuration: TimeInterval = 1
+        DispatchQueue.main.asyncAfter(deadline: .now() + snackBarDisplayDuration, execute: { [weak self] in
+            UIView.animate(withDuration: 0.2, animations: {
+                self?.snackBarView.alpha = 0
+            }) {(isFinished) in
+                if isFinished {
+                    self?.snackBarView.isHidden = true
+                }
+            }
+        })
     }
 }
 
@@ -114,9 +150,10 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard requestTask?.state == .completed else { return }
         let scrollIsCloseToNextPage: Bool = scrollView.contentOffset.y > scrollView.contentSize.height - (scrollView.frame.height * 2)
-        
         if scrollIsCloseToNextPage, scrollView.contentSize.height > 0 {
             currentLoadedPage += 1
+            requestCount += 1
+            print("REQUEST COUNT: \(requestCount)")
             getSearchResult(for: currentSearchQuery, page: currentLoadedPage)
         }
     }
