@@ -17,7 +17,6 @@ class ImageCache {
     )
     static let memoryCapacity: Int = 50.megabytes
     static let diskCapacity: Int = 100.megabytes
-
 }
 
 private extension Int {

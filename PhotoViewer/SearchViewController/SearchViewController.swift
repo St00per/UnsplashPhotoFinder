@@ -98,7 +98,7 @@ class SearchViewController: UIViewController {
     
     private func startSearchRequest() {
         noPhotosLabel.isHidden = true
-        guard let request = searchTextField.text?.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: "_"),
+        guard let request = searchTextField.text?.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: "+"),
             request != currentSearchQuery else {
                 return
             }
@@ -126,7 +126,7 @@ class SearchViewController: UIViewController {
                 if isFirstLoad {
                     addedIndex = index
                 } else {
-                    addedIndex = index + (self.photos.count - self.photosPerPage)
+                    addedIndex = index + (self.photos.count - newPhotos.count)
                 }
                 
                 let indexPath = IndexPath(item: addedIndex, section: 0)
