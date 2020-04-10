@@ -8,7 +8,15 @@
 
 import UIKit
 
+protocol UnsplashPhotoCellDelegate: AnyObject {
+    func cellHasDoubleTapped(at index: Int)
+}
+
 class UnsplashPhotoCell: UICollectionViewCell {
+    
+    //MARK: - Public variables
+    var delegate: UnsplashPhotoCellDelegate?
+    var index: Int?
     
     // MARK: - IBOutlets
     @IBOutlet weak var imageView: UIImageView!
@@ -24,6 +32,15 @@ class UnsplashPhotoCell: UICollectionViewCell {
     private var imageUrlString: String?
     
     //MARK: - Lifecycle
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
+        doubleTapGesture.numberOfTapsRequired = 2
+        self.addGestureRecognizer(doubleTapGesture)
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         if let spinner = self.spinner {
@@ -32,11 +49,23 @@ class UnsplashPhotoCell: UICollectionViewCell {
     }
     
     // MARK: - Public methods
-    func configure(with photo: UnsplashPhoto) {
+    func configure(with photo: UnsplashPhoto, quality: PhotoQualityEnum) {
         
-        imageUrlString = photo.urls.thumb
+        switch quality {
+        case .raw:
+            imageUrlString = photo.urls.raw
+        case .full:
+            imageUrlString = photo.urls.full
+        case .regular:
+            imageUrlString = photo.urls.regular
+        case .small:
+            imageUrlString = photo.urls.small
+        case .thumb:
+            imageUrlString = photo.urls.thumb
+        }
+        
         imageView.image = nil
-        if let url = URL(string: photo.urls.thumb) {
+        if let imageString = self.imageUrlString, let url = URL(string: imageString) {
             if let cachedResponse = cache.cachedResponse(for: URLRequest(url: url)),
                 let image = UIImage(data: cachedResponse.data) {
                 imageView.image = image
@@ -65,5 +94,10 @@ class UnsplashPhotoCell: UICollectionViewCell {
                 }
             }
         }
+    }
+    
+    @objc private func handleDoubleTap(_ tapGesture: UITapGestureRecognizer) {
+        guard let index = self.index else { return }
+        delegate?.cellHasDoubleTapped(at: index)
     }
 }

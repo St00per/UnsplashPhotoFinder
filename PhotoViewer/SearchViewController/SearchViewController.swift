@@ -11,6 +11,8 @@ import UIKit
 class SearchViewController: UIViewController {
     
     // MARK: - IBOutlets
+    
+    @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
@@ -34,6 +36,7 @@ class SearchViewController: UIViewController {
            makeURLRequest()
         }
     }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +52,12 @@ class SearchViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "UnsplashPhotoCell", bundle: nil), forCellWithReuseIdentifier: "UnsplashPhotoCell")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.collectionView.alpha = 1
+        self.headerView.alpha = 1
     }
     
     // MARK: - IBActions
@@ -169,6 +178,82 @@ class SearchViewController: UIViewController {
             }
         })
     }
+    
+    func customSnapShotFrom(view:UIView) -> UIView {
+
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 0)
+        view.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let cellImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        let imageView = UIImageView(image: cellImage)
+        return imageView
+    }
+    
+    private func showDetailViewControllerAnimatedly(fromCellAt index: Int) {
+        
+        guard let cell = collectionView.cellForItem(at: [0,index]),
+              let cellAttributes = collectionView.layoutAttributesForItem(at: [0,index]) else {
+                return
+        }
+        let snapshot = customSnapShotFrom(view: cell)
+        print(snapshot)
+        
+        let cellFrameInSuperview = collectionView.convert(cellAttributes.frame, to: collectionView.superview)
+        snapshot.frame = cellFrameInSuperview
+        snapshot.contentMode = .scaleAspectFit
+        
+        
+        self.view.addSubview(snapshot)
+        
+        snapshot.translatesAutoresizingMaskIntoConstraints = false
+        let horizontalConstraint = NSLayoutConstraint(item: snapshot,
+                                                      attribute: NSLayoutConstraint.Attribute.centerX,
+                                                      relatedBy: NSLayoutConstraint.Relation.equal,
+                                                      toItem: view,
+                                                      attribute: NSLayoutConstraint.Attribute.centerX,
+                                                      multiplier: 1,
+                                                      constant: 0)
+        let verticalConstraint = NSLayoutConstraint(item: snapshot,
+                                                    attribute: NSLayoutConstraint.Attribute.centerY,
+                                                    relatedBy: NSLayoutConstraint.Relation.equal,
+                                                    toItem: view,
+                                                    attribute: NSLayoutConstraint.Attribute.centerY,
+                                                    multiplier: 1,
+                                                    constant: 0)
+        let widthConstraint = NSLayoutConstraint(item: snapshot,
+                                                 attribute: NSLayoutConstraint.Attribute.width,
+                                                 relatedBy: NSLayoutConstraint.Relation.equal,
+                                                 toItem: nil,
+                                                 attribute: NSLayoutConstraint.Attribute.notAnAttribute,
+                                                 multiplier: 1,
+                                                 constant: collectionView.frame.width)
+        let heightConstraint = NSLayoutConstraint(item: snapshot,
+                                                  attribute: NSLayoutConstraint.Attribute.height,
+                                                  relatedBy: NSLayoutConstraint.Relation.equal,
+                                                  toItem: nil,
+                                                  attribute: NSLayoutConstraint.Attribute.notAnAttribute,
+                                                  multiplier: 1,
+                                                  constant: collectionView.frame.height)
+        view.addConstraints([horizontalConstraint, verticalConstraint, widthConstraint, heightConstraint])
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.layoutIfNeeded()
+            self.collectionView.alpha = 0.3
+            self.headerView.alpha = 0.3
+        }) {(isFinished) in
+            if isFinished {
+                
+                let photoDetailViewController = PhotoDetailViewController()
+                photoDetailViewController.photos = self.photos
+                photoDetailViewController.initialPhotoIndex = index
+                photoDetailViewController.modalPresentationStyle = .overCurrentContext
+                self.present(photoDetailViewController, animated: false, completion: {
+                    snapshot.removeFromSuperview()
+                })
+            }
+        }
+    }
 }
 
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -184,7 +269,9 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             return cell
         }
         
-        unsplashCell.configure(with: photos[indexPath.row])
+        unsplashCell.configure(with: photos[indexPath.row], quality: .small)
+        unsplashCell.delegate = self
+        unsplashCell.index = indexPath.row
         return cell
     }
     
@@ -208,10 +295,6 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return spaceBetweenCell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.view.endEditing(true)
-    }
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard requestTask?.state == .completed else { return }
         let scrollIsCloseToNextPage: Bool = scrollView.contentOffset.y > scrollView.contentSize.height - (scrollView.frame.height * 2)
@@ -233,3 +316,11 @@ extension SearchViewController: UITextFieldDelegate {
         return false
     }
 }
+
+extension SearchViewController: UnsplashPhotoCellDelegate {
+    
+    func cellHasDoubleTapped(at index: Int) {
+        showDetailViewControllerAnimatedly(fromCellAt: index)
+    }
+}
+

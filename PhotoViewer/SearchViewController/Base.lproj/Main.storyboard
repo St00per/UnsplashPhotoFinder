@@ -161,6 +161,7 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="OJo-yn-Mkb" id="GO7-PR-T1m"/>
+                        <outlet property="headerView" destination="2Lj-Fd-nim" id="fCB-lQ-qtk"/>
                         <outlet property="noPhotosLabel" destination="4nL-IT-OmU" id="R2l-O8-COV"/>
                         <outlet property="searchButton" destination="iYe-ci-XT6" id="mAP-Xl-ejN"/>
                         <outlet property="searchTextField" destination="fAC-nW-hUR" id="Vju-CV-TO5"/>

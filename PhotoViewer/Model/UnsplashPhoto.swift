@@ -8,6 +8,14 @@
 
 import Foundation
 
+enum PhotoQualityEnum {
+    case raw
+    case full
+    case regular
+    case small
+    case thumb
+}
+
 struct UnsplashPhoto: Decodable {
     let id: String
     let width: Int
