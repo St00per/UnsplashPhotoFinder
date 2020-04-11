@@ -24,6 +24,7 @@ class SearchViewController: UIViewController {
     private let spaceBetweenCell: CGFloat = 8
     private let itemPerRow: CGFloat = 4
     private let unsplashAccessKey = "iZnFTNJfLHt3QyzUQSihOuxjmEYpXO96ZPaQquA8S7M"
+    let backgroundView = UIView()
     
     // MARK: - Private variables
     private var photos: [UnsplashPhoto] = []
@@ -56,8 +57,7 @@ class SearchViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.collectionView.alpha = 1
-        self.headerView.alpha = 1
+        backgroundView.removeFromSuperview()
     }
     
     // MARK: - IBActions
@@ -204,6 +204,10 @@ class SearchViewController: UIViewController {
         snapshot.contentMode = .scaleAspectFit
         
         
+        backgroundView.backgroundColor = .white
+        self.view.addSubview(backgroundView)
+        backgroundView.alpha = 0
+        backgroundView.frame = self.view.frame
         self.view.addSubview(snapshot)
         
         snapshot.translatesAutoresizingMaskIntoConstraints = false
@@ -239,8 +243,7 @@ class SearchViewController: UIViewController {
         
         UIView.animate(withDuration: 0.3, animations: {
             self.view.layoutIfNeeded()
-            self.collectionView.alpha = 0.3
-            self.headerView.alpha = 0.3
+            self.backgroundView.alpha = 1
         }) {(isFinished) in
             if isFinished {
                 
@@ -248,7 +251,8 @@ class SearchViewController: UIViewController {
                 photoDetailViewController.photos = self.photos
                 photoDetailViewController.initialPhotoIndex = index
                 photoDetailViewController.modalPresentationStyle = .overCurrentContext
-                self.present(photoDetailViewController, animated: false, completion: {
+                photoDetailViewController.modalTransitionStyle = .crossDissolve
+                self.present(photoDetailViewController, animated: true, completion: {
                     snapshot.removeFromSuperview()
                 })
             }
