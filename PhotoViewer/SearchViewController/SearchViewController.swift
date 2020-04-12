@@ -179,7 +179,7 @@ class SearchViewController: UIViewController {
         })
     }
     
-    func customSnapShotFrom(view:UIView) -> UIView {
+    private func customSnapShot(from view:UIView) -> UIView {
 
         UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 0)
         view.layer.render(in: UIGraphicsGetCurrentContext()!)
@@ -190,63 +190,64 @@ class SearchViewController: UIViewController {
         return imageView
     }
     
-    private func showDetailViewControllerAnimatedly(fromCellAt index: Int) {
-        
-        guard let cell = collectionView.cellForItem(at: [0,index]),
-              let cellAttributes = collectionView.layoutAttributesForItem(at: [0,index]) else {
-                return
-        }
-        let snapshot = customSnapShotFrom(view: cell)
-        print(snapshot)
-        
-        let cellFrameInSuperview = collectionView.convert(cellAttributes.frame, to: collectionView.superview)
-        snapshot.frame = cellFrameInSuperview
-        snapshot.contentMode = .scaleAspectFit
-        
-        
-        backgroundView.backgroundColor = .white
-        self.view.addSubview(backgroundView)
-        backgroundView.alpha = 0
-        backgroundView.frame = self.view.frame
-        self.view.addSubview(snapshot)
-        
-        snapshot.translatesAutoresizingMaskIntoConstraints = false
-        let horizontalConstraint = NSLayoutConstraint(item: snapshot,
+    private func addConstraints(for view: UIView) {
+        view.translatesAutoresizingMaskIntoConstraints = false
+        let horizontalConstraint = NSLayoutConstraint(item: view,
                                                       attribute: NSLayoutConstraint.Attribute.centerX,
                                                       relatedBy: NSLayoutConstraint.Relation.equal,
-                                                      toItem: view,
+                                                      toItem: self.view,
                                                       attribute: NSLayoutConstraint.Attribute.centerX,
                                                       multiplier: 1,
                                                       constant: 0)
-        let verticalConstraint = NSLayoutConstraint(item: snapshot,
+        let verticalConstraint = NSLayoutConstraint(item: view,
                                                     attribute: NSLayoutConstraint.Attribute.centerY,
                                                     relatedBy: NSLayoutConstraint.Relation.equal,
-                                                    toItem: view,
+                                                    toItem: self.view,
                                                     attribute: NSLayoutConstraint.Attribute.centerY,
                                                     multiplier: 1,
                                                     constant: 0)
-        let widthConstraint = NSLayoutConstraint(item: snapshot,
+        let widthConstraint = NSLayoutConstraint(item: view,
                                                  attribute: NSLayoutConstraint.Attribute.width,
                                                  relatedBy: NSLayoutConstraint.Relation.equal,
                                                  toItem: nil,
                                                  attribute: NSLayoutConstraint.Attribute.notAnAttribute,
                                                  multiplier: 1,
                                                  constant: collectionView.frame.width)
-        let heightConstraint = NSLayoutConstraint(item: snapshot,
+        let heightConstraint = NSLayoutConstraint(item: view,
                                                   attribute: NSLayoutConstraint.Attribute.height,
                                                   relatedBy: NSLayoutConstraint.Relation.equal,
                                                   toItem: nil,
                                                   attribute: NSLayoutConstraint.Attribute.notAnAttribute,
                                                   multiplier: 1,
                                                   constant: collectionView.frame.height)
-        view.addConstraints([horizontalConstraint, verticalConstraint, widthConstraint, heightConstraint])
+        self.view.addConstraints([horizontalConstraint, verticalConstraint, widthConstraint, heightConstraint])
+    }
+    
+    private func showDetailViewControllerAnimatedly(fromCellAt index: Int) {
+        
+        guard let cell = collectionView.cellForItem(at: [0,index]),
+            let cellAttributes = collectionView.layoutAttributesForItem(at: [0,index]) else {
+                return
+        }
+        
+        self.view.addSubview(backgroundView)
+        backgroundView.backgroundColor = .white
+        backgroundView.alpha = 0
+        backgroundView.frame = self.view.frame
+        
+        let snapshot = customSnapShot(from: cell)
+        let cellFrameInSuperview = collectionView.convert(cellAttributes.frame, to: collectionView.superview)
+        snapshot.frame = cellFrameInSuperview
+        snapshot.contentMode = .scaleAspectFit
+        
+        self.view.addSubview(snapshot)
+        addConstraints(for: snapshot)
         
         UIView.animate(withDuration: 0.3, animations: {
             self.view.layoutIfNeeded()
             self.backgroundView.alpha = 1
         }) {(isFinished) in
             if isFinished {
-                
                 let photoDetailViewController = PhotoDetailViewController()
                 photoDetailViewController.photos = self.photos
                 photoDetailViewController.initialPhotoIndex = index

@@ -18,7 +18,6 @@ class PhotoDetailViewController: UIViewController {
     
     // MARK: - IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var closeButton: UIButton!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -26,12 +25,10 @@ class PhotoDetailViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "UnsplashPhotoCell", bundle: nil), forCellWithReuseIdentifier: "UnsplashPhotoCell")
-        //collectionView.alpha = 0
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
+        
+        let slideDown = UISwipeGestureRecognizer(target: self, action: #selector(animatedlySelfDismiss))
+        slideDown.direction = .down
+        view.addGestureRecognizer(slideDown)
     }
     
     override func viewDidLayoutSubviews() {
@@ -44,10 +41,6 @@ class PhotoDetailViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         initialScrollNeeded = false
-        
-//        UIView.animate(withDuration: 0.3, animations: {
-//            self.collectionView.alpha = 1
-//        })
     }
     
     fileprivate func getPageFromScrollView(_ scrollView: UIScrollView) -> Int {
@@ -56,12 +49,10 @@ class PhotoDetailViewController: UIViewController {
         return Int(page)
     }
     
-    //MARK: - IBActions
-    @IBAction func closeButtonPressed(_ sender: UIButton) {
+    @objc private func animatedlySelfDismiss() {
         let searchController = presentingViewController as? SearchViewController
         UIView.animate(withDuration: 0.3, animations: {
             self.collectionView.alpha = 0
-            self.closeButton.alpha = 0
             searchController?.viewWillAppear(true)
         }) {(isFinished) in
             if isFinished {

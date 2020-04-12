@@ -10,7 +10,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PhotoDetailViewController" customModule="PhotoViewer" customModuleProvider="target">
             <connections>
-                <outlet property="closeButton" destination="uqj-Eu-gak" id="z71-58-T0Y"/>
                 <outlet property="collectionView" destination="l4W-e7-aSD" id="Q6O-F3-qA2"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -33,26 +32,12 @@
                                 <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             </collectionViewFlowLayout>
                         </collectionView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uqj-Eu-gak">
-                            <rect key="frame" x="354" y="60" width="44" height="44"/>
-                            <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="44" id="J2G-df-fQT"/>
-                                <constraint firstAttribute="width" constant="44" id="Txx-St-hph"/>
-                            </constraints>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <state key="normal" image="shevron"/>
-                            <connections>
-                                <action selector="closeButtonPressed:" destination="-1" eventType="touchUpInside" id="0KW-R1-GFO"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="l4W-e7-aSD" firstAttribute="leading" secondItem="8ws-2i-Bfj" secondAttribute="leading" id="9qJ-0x-v2x"/>
                         <constraint firstAttribute="bottom" secondItem="l4W-e7-aSD" secondAttribute="bottom" id="aaS-Zd-ns5"/>
                         <constraint firstAttribute="trailing" secondItem="l4W-e7-aSD" secondAttribute="trailing" id="cKT-FH-LkN"/>
-                        <constraint firstAttribute="trailing" secondItem="uqj-Eu-gak" secondAttribute="trailing" constant="16" id="ig3-tp-RaA"/>
                         <constraint firstItem="l4W-e7-aSD" firstAttribute="top" secondItem="8ws-2i-Bfj" secondAttribute="top" id="ijN-kc-TvC"/>
                     </constraints>
                 </view>
@@ -62,14 +47,10 @@
                 <constraint firstItem="8ws-2i-Bfj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="RLN-M5-DfQ"/>
                 <constraint firstAttribute="bottom" secondItem="8ws-2i-Bfj" secondAttribute="bottom" id="gzN-Mq-lIg"/>
                 <constraint firstItem="8ws-2i-Bfj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="pQN-Hp-JiT"/>
-                <constraint firstItem="uqj-Eu-gak" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="16" id="r6g-LR-KAq"/>
                 <constraint firstAttribute="trailing" secondItem="8ws-2i-Bfj" secondAttribute="trailing" id="tuc-48-brO"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="132" y="135"/>
         </view>
     </objects>
-    <resources>
-        <image name="shevron" width="16" height="10"/>
-    </resources>
 </document>
